@@ -9,18 +9,16 @@ jobs:
   release:
     runs-on: ubuntu-latest
     outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      upload_url: ${{ steps.get_upload_url.outputs.upload_url }}
     steps:
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: true
-          prerelease: false
+      - name: Get latest release upload URL
+        id: get_upload_url
+        run: |
+          UPLOAD_URL=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/latest" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            | jq -r .upload_url | sed -e "s/{?name,label}//")
+          echo "::set-output name=upload_url::$UPLOAD_URL"
+
       - uses: actions/checkout@master
         with:
           repository: dndx/nchnroutes
