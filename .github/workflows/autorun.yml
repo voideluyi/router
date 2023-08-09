@@ -36,6 +36,8 @@ jobs:
           python3 produce.py --next="eth0"
           mv routes4.conf ../routes/eth0
           mv routes6.conf ../routes/eth0
+          cp ../routes/eth0/routes4.conf ../routes4.conf
+          cp ../routes/eth0/routes6.conf ../routes6.conf
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
@@ -52,7 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
         with:
           upload_url: ${{ steps.get_upload_url.outputs.upload_url }}
-          asset_path: ./routes/eth0/routes4.conf
+          asset_path: routes4.conf
           asset_name: routes4.conf
           asset_content_type: text/plain
 
@@ -62,6 +64,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
         with:
           upload_url: ${{ steps.get_upload_url.outputs.upload_url }}
-          asset_path: ./routes/eth0/routes6.conf
+          asset_path: routes6.conf
           asset_name: routes6.conf
           asset_content_type: text/plain
