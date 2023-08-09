@@ -20,6 +20,19 @@ jobs:
           UPLOAD_URL=$(echo "$RELEASE_INFO" | jq -r .upload_url)
           echo "::set-output name=upload_url::$UPLOAD_URL"
 
+      - name: Delete existing assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          RELEASE_ID=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/latest" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r .id)
+          ASSET_IDS=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID/assets" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r '.[].id')
+          for ID in $ASSET_IDS; do
+            curl -X DELETE "https://api.github.com/repos/${{ github.repository }}/releases/assets/$ID" \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          done
+
       - uses: actions/checkout@master
         with:
           repository: dndx/nchnroutes
