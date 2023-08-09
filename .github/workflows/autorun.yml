@@ -53,7 +53,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
+          upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: ./routes/eth0/routes4.conf
           asset_name: routes4.conf
           asset_content_type: text/plain
@@ -63,7 +63,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
         with:
-          upload_url: ${{ github.event.release.upload_url }}
+          upload_url: ${{ needs.release.outputs.upload_url }}
           asset_path: ./routes/eth0/routes6.conf
           asset_name: routes6.conf
           asset_content_type: text/plain
