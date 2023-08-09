@@ -14,9 +14,10 @@ jobs:
       - name: Get latest release upload URL
         id: get_upload_url
         run: |
-          UPLOAD_URL=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/latest" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            | jq -r .upload_url | sed -e "s/{?name,label}//")
+          RELEASE_INFO=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/latest" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}")
+          echo "$RELEASE_INFO" | jq .
+          UPLOAD_URL=$(echo "$RELEASE_INFO" | jq -r .upload_url)
           echo "::set-output name=upload_url::$UPLOAD_URL"
 
       - uses: actions/checkout@master
