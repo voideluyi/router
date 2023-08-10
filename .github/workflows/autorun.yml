@@ -42,16 +42,16 @@ jobs:
           python-version: "3.9"
       - name: Run codes
         run: |
-          mkdir routes/eth0 -p
+          mkdir routes/ens33 -p
           cd nchnroutes
           curl -s -o delegated-apnic-latest https://ftp.apnic.net/stats/apnic/delegated-apnic-latest
           curl -s -o chnroutes.txt https://raw.githubusercontent.com/misakaio/chnroutes2/master/chnroutes.txt
           cat chnroutes.txt | grep -Ev "^#" > china_ip_list.txt
-          python3 produce.py --next="eth0"
-          mv routes4.conf ../routes/eth0
-          mv routes6.conf ../routes/eth0
-          cp ../routes/eth0/routes4.conf ../routes4.conf
-          cp ../routes/eth0/routes6.conf ../routes6.conf
+          python3 produce.py --next="ens33"
+          mv routes4.conf ../routes/ens33
+          mv routes6.conf ../routes/ens33
+          cp ../routes/ens33/routes4.conf ../routes4.conf
+          cp ../routes/ens33/routes6.conf ../routes6.conf
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
